@@ -9,6 +9,11 @@ const bookSchema = new mongoose.Schema({
         default: ""   // 👈 optional
     },
     driveLink: String,
+    
+    semester: String,
+    subject: String,
+
+
     isApproved: {
         type: Boolean,
         default: false

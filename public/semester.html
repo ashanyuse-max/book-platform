@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subjects</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2 id="title"></h2>
+    <div id="subjectList" class="grid"></div>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const semester = urlParams.get("semester");
+
+document.getElementById("title").innerText = "Semester " + semester + " Subjects";
+
+fetch(`/api/books/approved`)
+.then(res => res.json())
+.then(data => {
+
+    const subjects = [...new Set(
+        data
+        .filter(book => book.semester === semester)
+        .map(book => book.subject)
+    )];
+
+    const subjectList = document.getElementById("subjectList");
+
+    subjects.forEach(sub => {
+        subjectList.innerHTML += `
+            <div class="card" onclick="goToSubject('${sub}')">
+                ${sub}
+            </div>
+        `;
+    });
+});
+
+function goToSubject(sub) {
+    window.location.href = `/subject.html?semester=${semester}&subject=${sub}`;
+}
+</script>
+
+</body>
+</html>
+

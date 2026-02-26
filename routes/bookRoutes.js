@@ -42,6 +42,9 @@ router.post("/upload", async (req, res) => {
             price: req.body.price,
             image: req.body.image || "",   // 👈 if empty, save blank
             driveLink: driveLink
+
+            semester: req.body.semester,
+            subject: req.body.subject,
         });
 
         await newBook.save();
