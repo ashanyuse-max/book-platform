@@ -23,28 +23,38 @@ fetch(`/api/books/approved`)
 .then(res => res.json())
 .then(data => {
 
-    const books = data.filter(book =>
+    const filteredBooks = data.filter(book =>
         book.semester === semester &&
         book.subject === subject
     );
 
     const bookList = document.getElementById("bookList");
 
-    books.forEach(book => {
+    if (filteredBooks.length === 0) {
+        bookList.innerHTML = "<p>No books available</p>";
+        return;
+    }
 
-        const imageUrl = book.image || 
-            "https://via.placeholder.com/200x300?text=No+Cover";
+    filteredBooks.forEach(book => {
 
-        bookList.innerHTML += `
-            <div class="book-card">
-                <img src="${imageUrl}">
-                <h3>${book.title}</h3>
-                <p>${book.author}</p>
-                <a href="${book.driveLink}" target="_blank">
-                    <button class="btn">Download</button>
-                </a>
-            </div>
-        `;
+        const imageUrl = book.image
+            ? `/uploads/${book.image}`
+            : "https://via.placeholder.com/200x300?text=No+Cover";
+
+       bookList.innerHTML += `
+    <div class="book-card">
+        <img src="${imageUrl}" />
+        <h3>${book.title}</h3>
+        <p>${book.author}</p>
+
+        <p><strong>Semester:</strong> ${book.semester}</p>
+        <p><strong>Subject:</strong> ${book.subject}</p>
+
+        <a href="${book.driveLink}" target="_blank">
+            <button class="btn">Download</button>
+        </a>
+    </div>
+`;
     });
 });
 </script>
