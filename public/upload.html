@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Book</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <h2>MBBS Book Platform</h2>
+    <div>
+        <a href="index.html">Home</a>
+        <a href="upload.html">Upload</a>
+        <a href="books.html">Books</a>
+        <a href="/admin">Admin</a>
+    </div>
+</div>
+
+<div class="container">
+
+<h2>Upload Book</h2>
+
+<form action="/api/books/upload" method="POST" enctype="multipart/form-data">
+
+<input type="text" name="title" placeholder="Book Title" required><br><br>
+<input type="text" name="author" placeholder="Author Name" required><br><br>
+<input type="number" name="price" placeholder="Price (0 for free)" required><br><br>
+<input type="text" name="driveLink" placeholder="Google Drive Link" required><br><br>
+
+<label>Cover Image:</label><br>
+<input type="file" name="image"><br><br>
+
+<label>Professional:</label><br>
+<select name="professional" required>
+<option value="">Select Professional</option>
+<option value="First Professional">First Professional</option>
+<option value="Second Professional">Second Professional</option>
+<option value="Third Professional Part 1">Third Professional Part 1</option>
+<option value="Third Professional Part 2">Third Professional Part 2</option>
+</select>
+
+<br><br>
+
+<label>Subject (Optional):</label><br>
+<select name="subject">
+<option value="">-- Select Subject --</option>
+<option>Anatomy</option>
+<option>Physiology</option>
+<option>Biochemistry</option>
+<option>Pathology</option>
+<option>Pharmacology</option>
+<option>Microbiology</option>
+<option>Forensic Medicine</option>
+<option>Community Medicine</option>
+<option>ENT</option>
+<option>Ophthalmology</option>
+<option>General Medicine</option>
+<option>General Surgery</option>
+<option>Obstetrics & Gynaecology</option>
+<option>Pediatrics</option>
+<option>Orthopedics</option>
+<option>Dermatology</option>
+<option>Psychiatry</option>
+<option>Radiology</option>
+<option>Anesthesia</option>
+</select>
+
+<br><br>
+
+<button type="submit" class="primary-btn">Upload Book</button>
+
+</form>
+
+</div>
+</body>
+</html>
