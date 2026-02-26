@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Books Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+
+    <div class="logo">
+        📚 BookKart
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search books...">
+        <button onclick="searchBooks()">Search</button>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="index.html">Upload</a>
+        <a href="/admin">Admin</a>
+    </div>
+
+</div>
+
+<div class="container">
+    <div id="bookList" class="grid"></div>
+</div>
+
+<script>
+let allBooks = [];
+
+fetch("/api/books/approved")
+.then(res => res.json())
+.then(data => {
+    allBooks = data;
+    displayBooks(data);
+});
+
+function displayBooks(books) {
+    const bookList = document.getElementById("bookList");
+    bookList.innerHTML = "";
+
+    if (books.length === 0) {
+        bookList.innerHTML = "<p>No books found.</p>";
+        return;
+    }
+
+   books.forEach(book => {
+
+    let imageUrl = book.image;
+
+    // If image is empty or invalid, use placeholder
+    if (!imageUrl || imageUrl.trim() === "") {
+        imageUrl = "https://via.placeholder.com/200x300?text=No+Cover";
+    }
+
+    bookList.innerHTML += `
+        <div class="book-card">
+            <img src="${imageUrl}"
+                 onerror="this.src='https://via.placeholder.com/200x300?text=No+Cover'"
+                 style="width:100%; height:250px; object-fit:cover; border-radius:10px;">
+
+            <h3>${book.title}</h3>
+            <p>Author: ${book.author}</p>
+            <p>₹${book.price}</p>
+
+            <a href="${book.driveLink}" target="_blank">
+                <button class="btn">Download</button>
+            </a>
+        </div>
+    `;
+});
+}
+
+function searchBooks() {
+    const searchValue = document.getElementById("searchInput").value.toLowerCase();
+
+    const filtered = allBooks.filter(book =>
+        book.title.toLowerCase().includes(searchValue) ||
+        book.author.toLowerCase().includes(searchValue)
+    );
+
+    displayBooks(filtered);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>BookPlatform</h2>
+    <div>
+        <a href="index.html">Upload</a>
+        <a href="books.html">Books</a>
+        <a href="admin.html">Admin</a>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Admin Panel - Manage Books</h2>
+    <div id="bookList"></div>
+</div>
+
+<script>
+fetch("/api/books/all")
+.then(res => res.json())
+.then(data => {
+    const bookList = document.getElementById("bookList");
+    bookList.innerHTML = "";
+
+    if (data.length === 0) {
+        bookList.innerHTML = "<p>No books uploaded yet.</p>";
+        return;
+    }
+
+    data.forEach(book => {
+        bookList.innerHTML += `
+            <div class="card">
+                <h3>${book.title}</h3>
+                <p>Author: ${book.author}</p>
+                <p>Price: ₹${book.price}</p>
+                <p>Status: ${book.isApproved ? "Approved" : "Pending"}</p>
+                <button class="btn btn-success" onclick="approveBook('${book._id}')">Approve</button>
+                <button class="btn btn-danger" onclick="deleteBook('${book._id}')">Delete</button>
+            </div>
+        `;
+    });
+});
+
+function approveBook(id) {
+    fetch(`/api/books/approve/${id}`, { method: "PUT" })
+    .then(res => res.json())
+    .then(() => location.reload());
+}
+
+function deleteBook(id) {
+    fetch(`/api/books/delete/${id}`, { method: "DELETE" })
+    .then(res => res.json())
+    .then(() => location.reload());
+}
+</script>
+
+</body>
+</html>
