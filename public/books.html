@@ -29,13 +29,29 @@
 </div>
 
 <script>
+
+const params = new URLSearchParams(window.location.search);
+const professional = params.get("professional");
+const subject = params.get("subject");
+
 let allBooks = [];
 
 fetch("/api/books/approved")
 .then(res => res.json())
 .then(data => {
-    allBooks = data;
-    displayBooks(data);
+
+    // If professional & subject exist → filter
+    if (professional && subject) {
+        allBooks = data.filter(book =>
+            book.professional === professional &&
+            book.subject === subject
+        );
+    } else {
+        // If opened directly, show all books
+        allBooks = data;
+    }
+
+    displayBooks(allBooks);
 });
 
 function displayBooks(books) {
@@ -47,31 +63,35 @@ function displayBooks(books) {
         return;
     }
 
-   books.forEach(book => {
+    books.forEach(book => {
 
-    let imageUrl = book.image;
+        let imageUrl = book.image;
 
-    // If image is empty or invalid, use placeholder
-    if (!imageUrl || imageUrl.trim() === "") {
-        imageUrl = "https://via.placeholder.com/200x300?text=No+Cover";
-    }
+        if (!imageUrl || imageUrl.trim() === "") {
+            imageUrl = "https://via.placeholder.com/200x300?text=No+Cover";
+        } else {
+            imageUrl = `/uploads/${imageUrl}`;
+        }
 
-    bookList.innerHTML += `
-        <div class="book-card">
-            <img src="${imageUrl}"
-                 onerror="this.src='https://via.placeholder.com/200x300?text=No+Cover'"
-                 style="width:100%; height:250px; object-fit:cover; border-radius:10px;">
+        bookList.innerHTML += `
+            <div class="book-card">
+                <img src="${imageUrl}"
+                     onerror="this.src='https://via.placeholder.com/200x300?text=No+Cover'"
+                     style="width:100%; height:250px; object-fit:cover; border-radius:10px;">
 
-            <h3>${book.title}</h3>
-            <p>Author: ${book.author}</p>
-            <p>₹${book.price}</p>
+                <h3>${book.title}</h3>
+                <p>Author: ${book.author}</p>
+                <p>₹${book.price}</p>
 
-            <a href="${book.driveLink}" target="_blank">
-                <button class="btn">Download</button>
-            </a>
-        </div>
-    `;
-});
+                <p><strong>Professional:</strong> ${book.professional}</p>
+                <p><strong>Subject:</strong> ${book.subject}</p>
+
+                <a href="${book.driveLink}" target="_blank">
+                    <button class="btn">Download</button>
+                </a>
+            </div>
+        `;
+    });
 }
 
 function searchBooks() {
@@ -84,6 +104,7 @@ function searchBooks() {
 
     displayBooks(filtered);
 }
+
 </script>
 
 </body>

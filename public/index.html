@@ -1,44 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload Book</title>
+    <title>MBBS Book Platform</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="navbar">
-    <h2>BookPlatform</h2>
+    <h2>MBBS Book Platform</h2>
     <div>
-        <a href="index.html">Upload</a>
+        <a href="index.html">Home</a>
         <a href="books.html">Books</a>
         <a href="admin.html">Admin</a>
     </div>
 </div>
 
 <div class="container">
-   
 
- <div class="container">
-    <h2>Select Semester</h2>
+    <!-- ================= PROFESSIONAL SELECTION ================= -->
+    <h2>Select Professional</h2>
 
     <div class="grid">
-        <div class="card" onclick="goToSemester('1')">Semester 1</div>
-        <div class="card" onclick="goToSemester('2')">Semester 2</div>
-        <div class="card" onclick="goToSemester('3')">Semester 3</div>
-        <div class="card" onclick="goToSemester('4')">Semester 4</div>
+        <div class="card" onclick="goToProfessional('First Professional')">
+            First Professional
+        </div>
+
+        <div class="card" onclick="goToProfessional('Second Professional')">
+            Second Professional
+        </div>
+
+        <div class="card" onclick="goToProfessional('Third Professional Part 1')">
+            Third Professional Part 1
+        </div>
+
+        <div class="card" onclick="goToProfessional('Third Professional Part 2')">
+            Third Professional Part 2
+        </div>
     </div>
+
+    <hr style="margin:40px 0;">
+
+    <!-- ================= UPLOAD FORM ================= -->
+    <h2>Upload Book</h2>
+
+    <form action="/api/books/upload" method="POST" enctype="multipart/form-data">
+
+        <input type="text" name="title" placeholder="Book Title" required><br><br>
+
+        <input type="text" name="author" placeholder="Author Name" required><br><br>
+
+        <input type="number" name="price" placeholder="Price (0 for free)" required><br><br>
+
+        <input type="text" name="driveLink" placeholder="Google Drive Link" required><br><br>
+
+        <label>Cover Image:</label><br>
+        <input type="file" name="image"><br><br>
+
+        <!-- PROFESSIONAL DROPDOWN -->
+        <label>Professional:</label><br>
+        <select name="professional" required>
+            <option value="">Select Professional</option>
+            <option value="First Professional">First Professional</option>
+            <option value="Second Professional">Second Professional</option>
+            <option value="Third Professional Part 1">Third Professional Part 1</option>
+            <option value="Third Professional Part 2">Third Professional Part 2</option>
+        </select>
+
+        <br><br>
+
+        <!-- SUBJECT DROPDOWN -->
+        <label>Subject (Optional):</label><br>
+        <select name="subject">
+            <option value="">-- Select Subject --</option>
+
+            <!-- First Professional -->
+            <option>Anatomy</option>
+            <option>Physiology</option>
+            <option>Biochemistry</option>
+
+            <!-- Second Professional -->
+            <option>Pathology</option>
+            <option>Pharmacology</option>
+            <option>Microbiology</option>
+            <option>Forensic Medicine</option>
+
+            <!-- Third Professional Part 1 -->
+            <option>Community Medicine</option>
+            <option>ENT</option>
+            <option>Ophthalmology</option>
+
+            <!-- Third Professional Part 2 -->
+            <option>General Medicine</option>
+            <option>General Surgery</option>
+            <option>Obstetrics & Gynaecology</option>
+            <option>Pediatrics</option>
+            <option>Orthopedics</option>
+            <option>Dermatology</option>
+            <option>Psychiatry</option>
+            <option>Radiology</option>
+            <option>Anesthesia</option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Upload Book</button>
+
+    </form>
+
 </div>
 
 <script>
-function goToSemester(sem) {
-    window.location.href = `/semester.html?semester=${sem}`;
+function goToProfessional(prof) {
+    window.location.href = `/subjects.html?professional=${encodeURIComponent(prof)}`;
 }
 </script>
 
-
-</div>
-
 </body>
 </html>
-

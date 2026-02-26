@@ -22,6 +22,7 @@
 </div>
 
 <script>
+
 fetch("/api/books/all")
 .then(res => res.json())
 .then(data => {
@@ -34,18 +35,59 @@ fetch("/api/books/all")
     }
 
     data.forEach(book => {
+
+        let subjectSection = "";
+
+        if (!book.subject) {
+            subjectSection = `
+                <select onchange="assignSubject('${book._id}', this.value)">
+                    <option value="">Assign Subject</option>
+                    <option>Anatomy</option>
+                    <option>Physiology</option>
+                    <option>Biochemistry</option>
+                    <option>Pathology</option>
+                    <option>Pharmacology</option>
+                    <option>Microbiology</option>
+                    <option>Forensic Medicine</option>
+                    <option>Community Medicine</option>
+                    <option>ENT</option>
+                    <option>Ophthalmology</option>
+                    <option>General Medicine</option>
+                    <option>General Surgery</option>
+                    <option>Obstetrics & Gynaecology</option>
+                    <option>Pediatrics</option>
+                    <option>Orthopedics</option>
+                    <option>Dermatology</option>
+                    <option>Psychiatry</option>
+                    <option>Radiology</option>
+                    <option>Anesthesia</option>
+                </select>
+            `;
+        } else {
+            subjectSection = `<p><strong>Subject:</strong> ${book.subject}</p>`;
+        }
+
         bookList.innerHTML += `
             <div class="card">
                 <h3>${book.title}</h3>
-                <p>Author: ${book.author}</p>
-                <p>Price: ₹${book.price}</p>
-                <p>Status: ${book.isApproved ? "Approved" : "Pending"}</p>
-                <button class="btn btn-success" onclick="approveBook('${book._id}')">Approve</button>
-                <button class="btn btn-danger" onclick="deleteBook('${book._id}')">Delete</button>
+                <p><strong>Author:</strong> ${book.author}</p>
+                <p><strong>Price:</strong> ₹${book.price}</p>
+                <p><strong>Professional:</strong> ${book.professional}</p>
+                ${subjectSection}
+                <p><strong>Status:</strong> ${book.isApproved ? "Approved" : "Pending"}</p>
+
+                <button class="btn btn-success" onclick="approveBook('${book._id}')">
+                    Approve
+                </button>
+
+                <button class="btn btn-danger" onclick="deleteBook('${book._id}')">
+                    Delete
+                </button>
             </div>
         `;
     });
 });
+
 
 function approveBook(id) {
     fetch(`/api/books/approve/${id}`, { method: "PUT" })
@@ -58,6 +100,25 @@ function deleteBook(id) {
     .then(res => res.json())
     .then(() => location.reload());
 }
+
+function assignSubject(id, subject) {
+
+    if (!subject) return;
+
+    fetch(`/api/books/assign-subject/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ subject })
+    })
+    .then(res => res.json())
+    .then(() => {
+        alert("Subject Assigned Successfully");
+        location.reload();
+    });
+}
+
 </script>
 
 </body>

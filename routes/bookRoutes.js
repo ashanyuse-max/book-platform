@@ -48,8 +48,8 @@ router.post("/upload", upload.fields([
         ? req.files["image"][0].filename
         : "",
 
-    semester: req.body.semester,
-    subject: req.body.subject
+    professional: req.body.professional,   // ✅ FIXED
+    subject: req.body.subject || null      // ✅ optional
 });
 
 
@@ -112,6 +112,20 @@ router.delete("/delete/:id", async (req, res) => {
     }
 });
 
+// ================= ASSIGN SUBJECT (ADMIN) =================
+router.put("/assign-subject/:id", async (req, res) => {
+    try {
+        const updatedBook = await Book.findByIdAndUpdate(
+            req.params.id,
+            { subject: req.body.subject },
+            { returnDocument: "after" }
+        );
+
+        res.json(updatedBook);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 module.exports = router;
 

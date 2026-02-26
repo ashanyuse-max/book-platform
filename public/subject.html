@@ -1,64 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Books</title>
+    <title>Subjects</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
     <h2 id="title"></h2>
-    <div id="bookList" class="grid"></div>
+    <div id="subjectList" class="grid"></div>
 </div>
 
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-const semester = urlParams.get("semester");
-const subject = urlParams.get("subject");
 
-document.getElementById("title").innerText =
-    `Semester ${semester} - ${subject}`;
+const params = new URLSearchParams(window.location.search);
+const professional = params.get("professional");
 
-fetch(`/api/books/approved`)
+document.getElementById("title").innerText = professional;
+
+// Fetch approved books
+fetch("/api/books/approved")
 .then(res => res.json())
 .then(data => {
 
-    const filteredBooks = data.filter(book =>
-        book.semester === semester &&
-        book.subject === subject
-    );
+    // Get unique subjects under this professional
+    const subjects = [...new Set(
+        data
+        .filter(book => book.professional === professional)
+        .map(book => book.subject)
+        .filter(Boolean)
+    )];
 
-    const bookList = document.getElementById("bookList");
+    const subjectList = document.getElementById("subjectList");
 
-    if (filteredBooks.length === 0) {
-        bookList.innerHTML = "<p>No books available</p>";
+    if (subjects.length === 0) {
+        subjectList.innerHTML = "<p>No subjects available yet</p>";
         return;
     }
 
-    filteredBooks.forEach(book => {
-
-        const imageUrl = book.image
-            ? `/uploads/${book.image}`
-            : "https://via.placeholder.com/200x300?text=No+Cover";
-
-       bookList.innerHTML += `
-    <div class="book-card">
-        <img src="${imageUrl}" />
-        <h3>${book.title}</h3>
-        <p>${book.author}</p>
-
-        <p><strong>Semester:</strong> ${book.semester}</p>
-        <p><strong>Subject:</strong> ${book.subject}</p>
-
-        <a href="${book.driveLink}" target="_blank">
-            <button class="btn">Download</button>
-        </a>
-    </div>
-`;
+    subjects.forEach(sub => {
+        subjectList.innerHTML += `
+            <div class="card" onclick="goToBooks('${sub}')">
+                ${sub}
+            </div>
+        `;
     });
+
 });
+
+function goToBooks(subject) {
+    window.location.href =
+        `/books.html?professional=${encodeURIComponent(professional)}&subject=${encodeURIComponent(subject)}`;
+}
+
 </script>
 
 </body>
 </html>
-
