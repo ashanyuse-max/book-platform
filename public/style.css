@@ -307,3 +307,104 @@ body {
     transform: translateY(-5px);
     background: rgba(255,255,255,0.15);
 }
+
+/* ================= BOOK CARD ================= */
+
+.book-card {
+    background: rgba(255,255,255,0.08);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(8px);
+    transition: 0.3s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.cover-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* ================= NO COVER ANIMATION ================= */
+
+.no-cover {
+    height: 250px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #1e3a8a, #0f172a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.no-cover span {
+    color: white;
+    font-weight: 600;
+    z-index: 2;
+}
+
+.pulse {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: rgba(59,130,246,0.4);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.8); opacity: 0.7; }
+    70% { transform: scale(1.4); opacity: 0; }
+    100% { transform: scale(0.8); opacity: 0; }
+}
+
+/* ================= SUBJECT THEMES ================= */
+
+/* Anatomy */
+.Anatomy {
+    background: linear-gradient(135deg, #7f1d1d, #1e293b);
+}
+
+/* Physiology */
+.Physiology {
+    background: linear-gradient(135deg, #065f46, #1e293b);
+}
+
+/* Pathology */
+.Pathology {
+    background: linear-gradient(135deg, #4c1d95, #1e293b);
+}
+
+/* Pharmacology */
+.Pharmacology {
+    background: linear-gradient(135deg, #1e3a8a, #1e293b);
+}
+
+/* Surgery */
+.General-Surgery {
+    background: linear-gradient(135deg, #991b1b, #1e293b);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,0.2), transparent 70%);
+    top: -200px;
+    right: -200px;
+    animation: float 8s infinite alternate ease-in-out;
+    z-index: -1;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(40px); }
+}
