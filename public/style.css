@@ -249,6 +249,7 @@ input {
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    width: 100%;
 }
 
 .upload-form input, .upload-form select, .admin-select {
@@ -610,6 +611,7 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 24px;
     margin-top: 20px;
+    width: 100%;
 }
 
 .books-grid {
@@ -617,6 +619,7 @@ body {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-top: 20px;
+    width: 100%;
 }
 
 @media (max-width: 900px) {
@@ -645,6 +648,8 @@ body {
     align-items: center;
     gap: 15px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    min-width: 0;
 }
 
 .horizontal-book-card:hover {
