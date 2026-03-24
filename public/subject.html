@@ -4,7 +4,7 @@
     <title>Subjects</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="home-body">
 
     <div class="navbar">
     
@@ -17,19 +17,42 @@
 </div>
 
 
-<div class="container center-container" style="margin-top: 50px;">
-    <h2 id="title" class="section-title" style="margin-bottom: 30px;"></h2>
-    <div id="subjectList" class="modern-grid"></div>
+<header class="hero">
+    <div class="hero-content">
+        <h1 class="hero-title gradient-text" id="heroTitle">Professional Subjects</h1>
+        <p class="hero-subtitle">Dive into expertly categorized study materials designed specifically for your professional year.</p>
+    </div>
+</header>
+<div class="hero-spacer"></div>
+
+<div class="professionals-overlay">
+    <div class="container center-container" style="max-width: 1200px;">
+        <h2 id="title" class="section-title" style="margin-bottom: 30px;"></h2>
+        <div id="subjectList" class="modern-grid"></div>
+    </div>
 </div>
 
 
 
 <script>
+    // PARALLAX SCROLL EFFECT
+    window.addEventListener("scroll", () => {
+        let scrolled = window.scrollY;
+        let hero = document.querySelector(".hero");
+        hero.style.transform = `translateY(${scrolled * 0.4}px) scale(${1 - scrolled * 0.0005})`;
+        hero.style.opacity = 1 - Math.min(scrolled * 0.0015, 1);
+        hero.style.filter = `blur(${scrolled * 0.01}px)`;
+    });
 
 const params = new URLSearchParams(window.location.search);
 const professional = params.get("professional");
 
-document.getElementById("title").innerText = professional;
+if(professional) {
+    document.getElementById("title").innerText = `Subjects for ${professional}`;
+    document.getElementById("heroTitle").innerText = `Year: ${professional.split(' ')[0]}`; // Short name for the massive hero text
+} else {
+    document.getElementById("title").innerText = `All Subjects`;
+}
 
 // Fetch approved books
 fetch("/api/books/approved")
