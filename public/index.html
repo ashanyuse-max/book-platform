@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MBBS Book Platform</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="home-body">
 
 <div class="navbar">
     <h2>MBBS Book Platform</h2>
@@ -18,34 +24,96 @@
     </div>
 </div>
 
-<div class="container">
+<!-- ================= HERO SECTION ================= -->
+<header class="hero" id="hero">
+    <div class="hero-content">
+        <div class="badge">✨ New Platform Update</div>
+        <h1 class="hero-title">Your Ultimate <span class="gradient-text">MBBS Companion</span></h1>
+        <p class="hero-subtitle">Access the best books, notes, and study materials for every professional year in one unified platform. Elevate your learning experience.</p>
+        <a href="#professionals" class="cta-button" onclick="smoothScrollToGrid()">Explore Books <span class="arrow">→</span></a>
+    </div>
+</header>
 
-    <h2>Select Professional</h2>
+<!-- Spacer allows scrolling past the fixed hero -->
+<div class="hero-spacer"></div>
 
-    <div class="grid">
-        <div class="card" onclick="goToProfessional('First Professional')">
-            First Professional
+<div class="professionals-overlay">
+    <div class="container center-container" id="professionals">
+        <h2 class="section-title">Select Professional</h2>
+
+    <div class="modern-grid">
+        <div class="modern-card" onclick="goToProfessional('First Professional')">
+            <div class="card-icon">📘</div>
+            <div class="card-info">
+                <h3>First Professional</h3>
+                <p>Anatomy, Physiology, Biochemistry</p>
+            </div>
+            <div class="card-arrow">→</div>
         </div>
 
-        <div class="card" onclick="goToProfessional('Second Professional')">
-            Second Professional
+        <div class="modern-card" onclick="goToProfessional('Second Professional')">
+            <div class="card-icon">🔬</div>
+            <div class="card-info">
+                <h3>Second Professional</h3>
+                <p>Pathology, Pharmacology, Microbiology...</p>
+            </div>
+            <div class="card-arrow">→</div>
         </div>
 
-        <div class="card" onclick="goToProfessional('Third Professional Part 1')">
-            Third Professional Part 1
+        <div class="modern-card" onclick="goToProfessional('Third Professional Part 1')">
+            <div class="card-icon">💊</div>
+            <div class="card-info">
+                <h3>Third Professional Part 1</h3>
+                <p>Ophthalmology, ENT, Community Med</p>
+            </div>
+            <div class="card-arrow">→</div>
         </div>
 
-        <div class="card" onclick="goToProfessional('Third Professional Part 2')">
-            Third Professional Part 2
+        <div class="modern-card" onclick="goToProfessional('Third Professional Part 2')">
+            <div class="card-icon">🏥</div>
+            <div class="card-info">
+                <h3>Third Professional Part 2</h3>
+                <p>Medicine, Surgery, OBG, Pediatrics</p>
+            </div>
+            <div class="card-arrow">→</div>
         </div>
     </div>
-
+    </div>
 </div>
 
 <script>
 function goToProfessional(prof) {
     window.location.href = `/subject.html?professional=${encodeURIComponent(prof)}`;
 }
+
+// Ensure Explore Books click scrolls precisely to the grid overlay
+function smoothScrollToGrid() {
+    event.preventDefault();
+    window.scrollTo({
+        top: window.innerHeight * 0.9,
+        behavior: 'smooth'
+    });
+}
+
+// Parallax Hero Effect: Push backwards, Blur and Fade
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const hero = document.getElementById('hero');
+    const vh = window.innerHeight;
+    
+    // Calculate progress as user scrolls down the first viewport height
+    let progress = scrollY / (vh * 0.8);
+    if(progress > 1) progress = 1;
+    
+    // Scale down from 1 to 0.9, Blur from 0 to 15px, Opacity from 1 to 0.3
+    let scale = 1 - (progress * 0.1);
+    let blur = progress * 15;
+    let opacity = 1 - (progress * 0.7);
+    
+    hero.style.transform = `scale(${scale}) translateZ(-50px)`;
+    hero.style.filter = `blur(${blur}px)`;
+    hero.style.opacity = opacity;
+});
 </script>
 
 </body>

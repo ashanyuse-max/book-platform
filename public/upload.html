@@ -19,57 +19,100 @@
 
 
 
-<form action="/api/books/upload" method="POST" enctype="multipart/form-data">
+<div class="container center-container" style="margin-top: 50px; max-width: 600px;">
+    <h2 class="section-title">Upload New Book</h2>
+    
+    <form id="uploadForm" class="upload-form">
 
-<input type="text" name="title" placeholder="Book Title" required><br><br>
-<input type="text" name="author" placeholder="Author Name" required><br><br>
-<input type="number" name="price" placeholder="Price (0 for free)" required><br><br>
-<input type="text" name="driveLink" placeholder="Google Drive Link" required><br><br>
+        <label>Book Specifics</label>
+        <input type="text" name="title" placeholder="Book Title" required>
+        <input type="text" name="author" placeholder="Author Name" required>
+        <input type="number" name="price" placeholder="Price (0 for free)" required>
+        <input type="text" name="driveLink" placeholder="Google Drive Link" required>
 
-<label>Cover Image:</label><br>
-<input type="file" name="image"><br><br>
+        <label>Cover Image (Optional)</label>
+        <input type="file" name="image" style="background: rgba(15,23,42,0.3); border: 1px dashed rgba(255,255,255,0.2);">
 
-<label>Professional:</label><br>
-<select name="professional" required>
-<option value="">Select Professional</option>
-<option value="First Professional">First Professional</option>
-<option value="Second Professional">Second Professional</option>
-<option value="Third Professional Part 1">Third Professional Part 1</option>
-<option value="Third Professional Part 2">Third Professional Part 2</option>
-</select>
+        <label>Academic Classification</label>
+        <select name="professional" required>
+            <option value="">Select Professional</option>
+            <option value="First Professional">First Professional</option>
+            <option value="Second Professional">Second Professional</option>
+            <option value="Third Professional Part 1">Third Professional Part 1</option>
+            <option value="Third Professional Part 2">Third Professional Part 2</option>
+        </select>
 
-<br><br>
+        <select name="subject">
+            <option value="">-- Select Subject (Optional) --</option>
+            <option>Anatomy</option>
+            <option>Physiology</option>
+            <option>Biochemistry</option>
+            <option>Pathology</option>
+            <option>Pharmacology</option>
+            <option>Microbiology</option>
+            <option>Forensic Medicine</option>
+            <option>Community Medicine</option>
+            <option>ENT</option>
+            <option>Ophthalmology</option>
+            <option>General Medicine</option>
+            <option>General Surgery</option>
+            <option>Obstetrics & Gynaecology</option>
+            <option>Pediatrics</option>
+            <option>Orthopedics</option>
+            <option>Dermatology</option>
+            <option>Psychiatry</option>
+            <option>Radiology</option>
+            <option>Anesthesia</option>
+        </select>
 
-<label>Subject (Optional):</label><br>
-<select name="subject">
-<option value="">-- Select Subject --</option>
-<option>Anatomy</option>
-<option>Physiology</option>
-<option>Biochemistry</option>
-<option>Pathology</option>
-<option>Pharmacology</option>
-<option>Microbiology</option>
-<option>Forensic Medicine</option>
-<option>Community Medicine</option>
-<option>ENT</option>
-<option>Ophthalmology</option>
-<option>General Medicine</option>
-<option>General Surgery</option>
-<option>Obstetrics & Gynaecology</option>
-<option>Pediatrics</option>
-<option>Orthopedics</option>
-<option>Dermatology</option>
-<option>Psychiatry</option>
-<option>Radiology</option>
-<option>Anesthesia</option>
-</select>
+        <button type="submit" class="cta-button" style="width: 100%; justify-content: center; margin-top: 15px;">Upload Book <span class="arrow">☁️</span></button>
 
-<br><br>
-
-<button type="submit" class="primary-btn">Upload Book</button>
-
-</form>
-
+    </form>
 </div>
+
+<!-- ================= POPUP ================= -->
+<div id="successPopup" class="popup-overlay">
+    <div class="popup-content">
+        <span class="popup-icon">🎉</span>
+        <h2 style="color: white; margin-bottom: 10px;">Thank You!</h2>
+        <p style="color: #94a3b8; margin-bottom: 25px;">Your book has been successfully submitted and is pending approval.</p>
+        <button type="button" class="cta-button" onclick="closePopup()">Upload Another</button>
+    </div>
+</div>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Stop standard redirect
+    
+    // Change button text briefly
+    const btn = this.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "Uploading... ⏳";
+    
+    const formData = new FormData(this);
+    
+    fetch('/api/books/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.message) {
+            document.getElementById('successPopup').classList.add('active');
+            this.reset();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(err => alert('Upload failed: ' + err))
+    .finally(() => {
+        btn.innerHTML = originalText;
+    });
+});
+
+function closePopup() {
+    document.getElementById('successPopup').classList.remove('active');
+}
+</script>
 </body>
 </html>
