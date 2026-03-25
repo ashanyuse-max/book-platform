@@ -65,6 +65,18 @@ app.get("/admin", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
+// ================= KEEP-ALIVE SYSTEM =================
+// Automatically prevents Render's free tier from sleeping every 15 minutes.
+const https = require("https");
+setInterval(() => {
+    const url = process.env.RENDER_EXTERNAL_URL || "https://drdash-1a1s.onrender.com";
+    if (url) {
+        https.get(url, (res) => {
+            if (res.statusCode === 200) console.log("Keep-alive ping sent successfully");
+        }).on("error", (err) => console.log("Keep-alive ping failed:", err.message));
+    }
+}, 14 * 60 * 1000); // Pings exactly every 14 minutes
+
 app.listen(PORT, () => {
     console.log("Server running...");
 });
