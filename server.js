@@ -26,8 +26,8 @@ app.use("/api/books", bookRoutes);
 // Connect DB
 
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err));
+    .then(() => console.log("MongoDB Connected"))
+    .catch(err => console.log(err));
 // Start server
 
 // ================= ADMIN LOGIN =================
@@ -35,7 +35,10 @@ mongoose.connect(process.env.MONGO_URI)
 app.post("/admin/login", (req, res) => {
     const { username, password } = req.body;
 
-    if (username === "admin" && password === "1234") {
+    const validUser = process.env.ADMIN_USERNAME || "drdriver101";
+    const validPass = process.env.ADMIN_PASSWORD || "AMIYOURSK";
+
+    if (username === validUser && password === validPass) {
         req.session.admin = true;
         res.json({ success: true });
     } else {
